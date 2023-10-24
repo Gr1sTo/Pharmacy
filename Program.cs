@@ -21,6 +21,13 @@ class Program
                 {
                     case 1:
                         ITaskManager taskManager = new TaskManager();
+                        if (taskManager is TaskManager taskManagerImpl)
+                        {
+                            taskManagerImpl.TaskComplete += (sender, e) =>
+                            {
+                                Console.WriteLine($"Завдання \"{e.TaskComplete.Title}\" відзначено як виконане.");
+                            };
+                        }
 
                         while (true)
                         {
@@ -50,7 +57,6 @@ class Program
                                         if (task != null)
                                         {
                                             taskManager.MarkTaskAsCompleted(task);
-                                            Console.WriteLine("Task marked as completed.");
                                         }
                                         else
                                         {

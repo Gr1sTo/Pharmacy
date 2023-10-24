@@ -53,6 +53,7 @@ namespace Pharmacy.Models
             tasks = new List<ITask>();
         }
 
+        public event EventHandler<TaskCompleteEventArgs> TaskComplete;
         public void AddTask(ITask task)
         {
             tasks.Add(task);
@@ -61,6 +62,7 @@ namespace Pharmacy.Models
         public void MarkTaskAsCompleted(ITask task)
         {
             task.Complete();
+            OnTaskComplete(new TaskCompleteEventArgs(task));
         }
 
         public void ListTasks()
@@ -85,6 +87,21 @@ namespace Pharmacy.Models
                 return true;
             }
             return false;
+        }
+
+        protected virtual void OnTaskComplete(TaskCompleteEventArgs e)
+        {
+            TaskComplete?.Invoke(this, e);
+        }
+    }
+
+    public class TaskCompleteEventArgs : EventArgs
+    {
+        public ITask TaskComplete { get; }
+
+        public TaskCompleteEventArgs(ITask task)
+        {
+            TaskComplete = task;
         }
     }
 }
